@@ -1,0 +1,171 @@
+\documentclass{bmstu}
+\usepackage{multirow}
+\usepackage{threeparttable}
+\usepackage[clean]{svg}
+\usepackage{adjustbox}
+
+\include{preamble}
+
+\bibliography{biblio}
+
+\begin{document}
+\renewcommand{\thelstlisting}{\arabic{lstlisting}}
+\lstset{%
+	language=python,
+	basicstyle=\small\sffamily,
+	numbers=left,
+	stepnumber=1,
+	numbersep=5pt,
+	frame=single,
+	tabsize=4,
+	captionpos=t,
+	breaklines=true,
+	breakatwhitespace=true,
+	escapeinside={\#*}{*)},
+	backgroundcolor=\color{white},
+}
+
+\begin{titlepage}
+	\newgeometry{pdftex, left=2cm, right=2cm, top=2.5cm, bottom=2.5cm}
+	\fontsize{12pt}{12pt}\selectfont
+	\noindent \begin{minipage}{0.15\textwidth}
+		\includegraphics[width=\linewidth]{img/b_logo.jpg}
+	\end{minipage}
+	\noindent\begin{minipage}{0.9\textwidth}\centering
+		\textbf{Министерство науки и высшего образования Российской Федерации}\\
+		\textbf{Федеральное государственное бюджетное образовательное учреждение высшего образования}\\
+		\textbf{«Московский государственный технический университет имени Н. Э.~Баумана}\\
+		\textbf{(национальный исследовательский университет)»}\\
+		\textbf{(МГТУ им. Н. Э.~Баумана)}
+	\end{minipage}
+
+	\noindent\rule{18cm}{3pt}
+	\newline\newline
+	\noindent ФАКУЛЬТЕТ $\underline{\text{«Информатика и системы управления»~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~}}$ \newline\newline
+	\noindent КАФЕДРА $\underline{\text{«Программное обеспечение ЭВМ и информационные технологии»~~~~~~~~~~~~~~~~~~~~~~~}}$\newline\newline\newline\newline\newline\newline\newline
+
+
+	\begin{center}
+		\noindent\begin{minipage}{1.3\textwidth}\centering
+		\Large\textbf{   ~~~ Лабораторная работа №7}\newline
+		\textbf{по дисциплине <<Анализ Алгоритмов>>}\newline\newline\newline
+		\end{minipage}
+	\end{center}
+
+	\noindent\textbf{Тема} 			$\underline{\text{Графовые представления}}$\newline\newline
+	\noindent\textbf{Студент} 		$\underline{\text{Куликов Е. А.}}$\newline\newline
+	\noindent\textbf{Группа} 		$\underline{\text{ИУ7-56Б}}$\newline\newline
+	\noindent\textbf{Преподаватель} $\underline{\text{Волкова Л. Л.}}$\newline
+
+	\begin{center}
+		\vfill
+		Москва~---~\the\year
+		~г.
+	\end{center}
+	\restoregeometry
+\end{titlepage}
+
+\renewcommand{\contentsname}{СОДЕРЖАНИЕ}
+\tableofcontents
+\setcounter{page}{2}
+
+% Введение
+\chapter*{ВВЕДЕНИЕ}
+\addcontentsline{toc}{chapter}{ВВЕДЕНИЕ}
+\addcontentsline{toc}{chapter}{ВВЕДЕНИЕ}
+
+\parЦелью данной лабораторной работы является исследование графовых моделей, для достижения поставленной цели необходимо решить следующие задачи:
+
+\begin{itemize}
+	\item[---] проанализировать предметную область;
+	\item[---] построить информационный граф;
+	\item[---] построить граф информационной истории;
+        \item[---] построить граф управления;
+        \item[---] построить граф операционной истории;
+        \item[---] сделать вывод о применимости графовых моделей к данной задаче.
+\end{itemize}
+
+\chapter{Входные данные}
+Входные данные --- фрагмент кода ЛР5, выходные --- графовые модели:
+\begin{center}
+\captionsetup{justification=raggedright,singlelinecheck=off}
+\begin{lstlisting}[label=lst:listing, language=c, numbers=none, caption=Фрагмент кода]
+while (true) {
+        if (after_write_queue.empty())
+            continue;
+        std::shared_ptr<task> t;
+        {
+            std::unique_lock lock(mtx_after_write);
+            t = after_write_queue.front();
+            after_write_queue.pop();
+            t->t.start_destr = std::chrono::high_resolution_clock::now();
+        }
+        std::ostringstream oss;
+        oss << "[";
+	for (int i = 0; i < t->recipe_ingredients.size(); i++) {
+            oss << "{\"name\": \"";
+            oss << t->recipe_ingredients[i];
+            oss << "\"},";
+        }
+	std::string steps = oss.str();
+	sql = "INSERT INTO RECIPE VALUES(" + std::to_string(n_tasks) + ", " + std::to_string(t->issue_id) +
+            ", " + "'" + t->filename + "'" + ", " + "'" + t->recipe_title + "'" +
+                ", " + "'" + steps + "'" +
+                    ", " + "'" + t->recipe_img_url + "');";
+        char *message_error;
+        int rc = sqlite3_exec(db, sql.c_str(), nullptr, nullptr, &message_error);
+        if (rc != SQLITE_OK) {
+            std::cout << "SQL error: " << message_error << std::endl;
+            sqlite3_free(message_error);
+        }
+	if (t->is_last)
+            break;
+}
+\end{lstlisting}
+\end{center}
+
+\chapter{Описание исследования}
+На рисунках \ref{fig:IG} --- \ref{fig:OI_GU} представлены полученные графовые модели:
+
+\begin{figure}[h]
+	\centering
+        \vspace{0pt}
+	\includegraphics[scale=0.35]{img/IG.jpg}
+	\caption{Информационны граф}
+ \vspace*{3in}
+	\label{fig:IG}
+\end{figure}
+
+\begin{figure}[h]
+	\centering
+        \vspace{0pt}
+	\includegraphics[scale=0.35]{img/II.jpg}
+	\caption{Информационная история}
+ \vspace*{3in}
+	\label{fig:II}
+\end{figure}
+
+\begin{figure}[h]
+	\centering
+        \vspace{0pt}
+	\includegraphics[scale=0.35]{img/OI_GU.jpg}
+	\caption{Операционная история и граф управления}
+ \vspace*{3in}
+	\label{fig:OI_GU}
+\end{figure}
+
+Из полученных результатов сделан вывод о том, что графовые модели могут быть применимы для описания данного фрагмента кода.
+
+\chapter*{ЗАКЛЮЧЕНИЕ}
+\addcontentsline{toc}{chapter}{ЗАКЛЮЧЕНИЕ}
+Цель работы достигнута, решены все поставленные задачи:
+\begin{itemize}
+	\item[---] проанализирована предметную область;
+	\item[---] построен информационный граф;
+	\item[---] построен граф информационной истории;
+        \item[---] построен граф управления;
+        \item[---] построен граф операционной истории;
+        \item[---] сделан вывод о применимости графовых моделей к данной задаче.
+\end{itemize}
+
+\end{document}

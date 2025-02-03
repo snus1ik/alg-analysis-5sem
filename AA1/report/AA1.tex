@@ -1,0 +1,643 @@
+\documentclass[a4paper,14pt, unknownkeysallowed]{extreport}
+
+\usepackage{cmap} % Улучшенный поиск русских слов в полученном pdf-файле
+\usepackage[T2A]{fontenc} % Поддержка русских букв
+\usepackage[utf8]{inputenc} % Кодировка utf8
+\usepackage[english,russian]{babel} % Языки: русский, английский
+\usepackage{enumitem}
+\usepackage{svg}
+%\usepackage{titlesec}
+
+%\titleformat{\section}{\filcenter\normalfont\Large\bfseries}{\thesection.}{0.2em}
+
+
+\usepackage{threeparttable}
+
+\usepackage[14pt]{extsizes}
+
+\usepackage{caption}
+\captionsetup{labelsep=endash}
+\captionsetup[figure]{name={Рисунок}}
+
+% \usepackage{ctable}
+% \captionsetup[table]{justification=raggedleft,singlelinecheck=off}
+
+\usepackage{amsmath}
+
+\usepackage{geometry}
+\geometry{left=30mm}
+\geometry{right=10mm}
+\geometry{top=20mm}
+\geometry{bottom=20mm}
+
+\usepackage{titlesec}
+\titleformat{\section}
+	{\normalsize\bfseries}
+	{\thesection}
+	{1em}{}
+\titlespacing*{\chapter}{0pt}{-30pt}{8pt}
+\titlespacing*{\section}{\parindent}{*4}{*4}
+\titlespacing*{\subsection}{\parindent}{*4}{*4}
+
+\usepackage{setspace}
+\onehalfspacing % Полуторный интервал
+
+\frenchspacing
+\usepackage{indentfirst} % Красная строка
+
+\usepackage{titlesec}
+\titleformat{\chapter}{\LARGE\bfseries}{\thechapter}{20pt}{\LARGE\bfseries}
+\titleformat{\section}{\Large\bfseries}{\thesection}{20pt}{\Large\bfseries}
+
+\usepackage{multirow}
+\usepackage{listings}
+\usepackage{xcolor}
+
+\lstset{%
+	language=python,
+	basicstyle=\small\sffamily,
+	numbers=left,
+	stepnumber=1,
+	numbersep=5pt,
+	frame=single,
+	tabsize=4,
+	captionpos=t,
+	breaklines=true,					
+	breakatwhitespace=true,
+	escapeinside={\#*}{*)},
+	backgroundcolor=\color{white},
+}
+
+
+\usepackage{pgfplots}
+\usetikzlibrary{datavisualization}
+\usetikzlibrary{datavisualization.formats.functions}
+
+\usepackage{graphicx}
+\newcommand{\img}[3] {
+	\begin{figure}[h!]
+		\center{\includegraphics[height=#1]{img/#2}}
+		\caption{#3}
+		\label{img:#2}
+	\end{figure}
+}
+
+
+\usepackage[justification=centering]{caption} % Настройка подписей float объектов
+
+\usepackage[unicode,pdftex]{hyperref} % Ссылки в pdf
+\hypersetup{hidelinks}
+
+\usepackage{csvsimple}
+
+\newcommand{\code}[1]{\texttt{#1}}
+
+
+
+
+
+\begin{document}
+
+% Титульная страница
+\begin{titlepage}
+	\newgeometry{pdftex, left=2cm, right=2cm, top=2.5cm, bottom=2.5cm}
+	\fontsize{12pt}{12pt}\selectfont
+	\noindent \begin{minipage}{0.15\textwidth}
+		\includegraphics[width=\linewidth]{img/b_logo.jpg}
+	\end{minipage}
+	\noindent\begin{minipage}{0.9\textwidth}\centering
+		\textbf{Министерство науки и высшего образования Российской Федерации}\\
+		\textbf{Федеральное государственное бюджетное образовательное учреждение высшего образования}\\
+		\textbf{«Московский государственный технический университет имени Н. Э.~Баумана}\\
+		\textbf{(национальный исследовательский университет)»}\\
+		\textbf{(МГТУ им. Н. Э.~Баумана)}
+	\end{minipage}
+	
+	\noindent\rule{18cm}{3pt}
+	\newline\newline
+	\noindent ФАКУЛЬТЕТ $\underline{\text{«Информатика и системы управления»~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~}}$ \newline\newline
+	\noindent КАФЕДРА $\underline{\text{«Программное обеспечение ЭВМ и информационные технологии»~~~~~~~~~~~~~~~~~~~~~~~}}$\newline\newline\newline\newline\newline\newline\newline
+	
+	
+	\begin{center}
+		\noindent\begin{minipage}{1.3\textwidth}\centering
+		\Large\textbf{   ~~~ Лабораторная работа №1}\newline
+		\textbf{по дисциплине <<Анализ Алгоритмов>>}\newline\newline\newline
+		\end{minipage}
+	\end{center}
+	
+	\noindent\textbf{Тема} 			$\underline{\text{Расстояние Левенштейна и Дамерау--Левенштейна}}$\newline\newline
+	\noindent\textbf{Студент} 		$\underline{\text{Куликов Е. А.}}$\newline\newline
+	\noindent\textbf{Группа} 		$\underline{\text{ИУ7-56Б}}$\newline\newline
+	\noindent\textbf{Преподаватель} $\underline{\text{Волкова Л. Л.}}$\newline
+	
+	\begin{center}
+		\vfill
+		Москва~---~\the\year
+		~г.
+	\end{center}
+	\restoregeometry
+\end{titlepage}
+
+
+% Страница содержания
+\renewcommand{\contentsname}{Содержание} 
+\tableofcontents
+\setcounter{page}{2}
+
+
+
+
+% Введение
+\chapter*{Введение}
+\addcontentsline{toc}{chapter}{Введение}
+
+В данной рабораторной работе изучается расстояние Левенштейна.\newline Расстояние Левенштейна --- минимальное количество операций (вставки, удаления, замены), которое необходимо для перевода одной строки в другую. Это расстояние помогает определить, насколько <<близки>> две  строки.
+
+Расстояние Левенштейна применяется в теории информации, компьютерной лингвистике и биоинформатике для:
+
+\begin{itemize}
+	\item[---] автозамены(исправления опечаток) и автозаполнения;
+	\item[---] сравнения текстовых файлов утилитой diff, например для определения различий между двумя файлами в Linux или разницы между двумя Git-деревьями;
+	\item[---] сравнения цепочек ДНК.
+\end{itemize}
+
+Целью данной лабораторной работы является изучение и реализация алгоритмов определения расстояния Левенштейна (итерационного, рекурсивного и рекурсивного с кэшированием) и Дамерау--Левенштейна(только итерационного). Для достижения поставленной цели необходимо решить следующие задачи:
+
+\begin{itemize}
+	\item[---] изучить итеративный и рекурсивный методы вычисления расстояния Левенштейна и Дамерау--Левенштейна;
+	\item[---] реализовать указанные алгоритмы поиска расстояния Левенштейна и Дамерау--Левенштейна;
+	\item[---] провести сравнение эффективности указанных алгоритмов по затраченному процессорному времени и по затраченной памяти;
+	\item[---] описать и обосновать полученные результаты в отчете о выполненной лабораторной работе.
+\end{itemize}
+
+
+
+
+
+\chapter{Аналитическая часть}
+
+В данном разделе будут рассмотрены алгоритмы нахождения расстояний Левенштейна и Дамерау--Левенштейна.
+
+\section{Расстояние Левенштейна}
+
+Расстояние Левенштейна [1] --- это минимальное количество операций вставки, удаления и замены, необходимых для превращения одной строки в другую.
+
+Указанные операции имеют цену (штраф)[4], при этом в общем случае цены операций могут не совпадать. В этой работе будут рассматриваться алгоритмы, в которых цены редакторских операций одинаковы и равны 1.
+В общем случае ($\lambda$ означает пустую строку).
+
+\begin{itemize}
+	\item[---] $w(a, b)$ --- цена замены символа $a$ на $b$, R (от англ. replace);
+	\item[---] $w(\lambda, b)$ --- цена вставки символа $b$, I (от англ. insert);
+	\item[---] $w(a, \lambda)$ --- цена удаления символа $a$, D (от англ. delete).
+\end{itemize}
+
+\section{Вычисление Расстояния Левенштейна}
+Для решения задачи о расстоянии Левенштейна находится последовательность операций, минимизирующая суммарную цену. В данной лабораторной работе рассматривается частный случай поиска этого расстояния при:
+
+\begin{itemize}
+	\item[---] $w(a, a) = 0$;
+	\item[---] $w(a, b) = 1$, $a \neq b$;
+	\item[---] $w(\lambda, b) = 1$;
+	\item[---] $w(a, \lambda) = 1$.
+\end{itemize}
+
+Имеется две строки $S_{1}$ и $S_{2}$, длинной $M$ и $N$ соответственно. Расстояние Левенштейна рассчитывается по рекуррентной формуле (\ref{eq:L}):
+
+$D(S_{1}, S_{2}) = D(M, N)$, где
+
+\begin{equation}
+	\label{eq:L}
+	D(i, j) = \begin{cases}
+	0, &\text{i = 0, j = 0}\\
+	i, &\text{j = 0, i > 0}\\
+	j, &\text{i = 0, j > 0}\\
+	min \begin{cases}
+		D(i, j - 1) + 1\\
+		D(i - 1, j) + 1\\
+		D(i - 1, j - 1) + m(S_{1}[i], S_{2}[i]) \\
+	\end{cases}
+	&\text{i > 0, j > 0}
+	\end{cases}
+\end{equation}
+
+\vspace{5mm}
+
+где функция $m(a, b)$ определена как:
+\begin{equation}
+\label{eq:m}
+m(a, b) = \begin{cases}
+0 &\text{если a = b,}\\
+1 &\text{иначе}
+\end{cases}.
+\end{equation}
+
+
+Рекурсивный алгоритм реализует формулу (\ref{eq:L}). Функция $D$ составлена таким образом, что для перевода из строки $a$ в строку $b$ требуется выполнить последовательно несколько операций (удаление, вставка, замена) в некоторой последовательности. Полагая, что $a'$, $b'$ — строки $a$ и $b$ без последнего символа соответственно, цена преобразования из строки $a$ в строку $b$ может быть выражена как:
+
+\begin{itemize}
+	\item[---] сумма цены преобразования строки $a'$ в $b'$ и цены проведения операции удаления, которая необходима для преобразования $a'$ в $a$;
+	\item[---] сумма цены преобразования строки $a'$ в $b'$ и цены проведения операции вставки, которая необходима для преобразования $b'$ в $b$;
+	\item[---] сумма цены преобразования из $a'$ в $b'$ и операции замены, предполагая, что $a$ и $b$ оканчиваются на разные символы;
+	\item[---] цена преобразования из $a'$ в $b'$, предполагая, что $a$ и $b$ оканчиваются на один и тот же символ.
+\end{itemize}
+
+Ценой преобразования будет минимальное значение приведенных вариантов.
+
+\section{Расстояние Дамерау--Левенштейна}
+
+Расстояние Дамерау--Левенштейна --- минимальное число операций вставки, удаления, замены и транспозиции соседних символов. То есть, по сравнению с расстоянием Левенштейна добавляется еще одна редакторская операция — транспозиция T (от англ. transposition).
+
+\section{Вычисление расстояния \newline Дамерау--Левенштейна}
+
+Расстояние Дамерау--Левенштейна может быть вычисленно по рекуррентной формуле (\ref{eq:DL}):
+
+\begin{equation}
+	\label{eq:DL}
+	D(i, j) = \begin{cases}
+	0 \qquad\qquad\qquad\qquad\qquad\qquad\qquad ,j = 0, i = 0\\
+	i \qquad\qquad\qquad\qquad\qquad\qquad\qquad ,j = 0, i > 0\\
+	j \qquad\qquad\qquad\qquad\qquad\qquad\qquad ,j > 0, i = 0\\
+	min \begin{cases}
+		D(i, j - 1) + 1\\
+		D(i - 1, j) + 1\\
+		D(i - 1, j - 1) + \\\qquad\qquad m(S_{1}[i], S_{2}[i])\\
+		D(i - 2, j - 2) + \\\qquad\qquad m(S_{1}[i], S_{2}[i]) \\
+	\end{cases}
+	\begin{aligned}
+		& , \text{если i > 1, j > 1} \\
+		& , S_{1}[i] = S_{2}[j - 1]  \\
+		& , S_{1}[j] =  S_{2}[i - 1] \\
+	\end{aligned}\\
+	min \begin{cases}
+		D(i, j - 1) + 1\\
+		D(i - 1, j) + 1 &  \text{,иначе}\\
+		D(i - 1, j - 1) + \\\qquad\qquad m(S_{1}[i], S_{2}[i]) \\
+	\end{cases}
+	\end{cases}
+\end{equation}
+	    
+\section*{Вывод}
+В данном разделе были рассмотрены расстояния Левенштейна и Дамерау--Левенштейна. Формулы для нахождения этих расстояний, а следовательно, алгоритмы могут быть реализованы рекурсивно и итерационно.
+
+
+\chapter{Конструкторская часть}
+В данном разделе будут разработаны алгоритмы нахождения расстояний Левенштейна и Дамерау--Левенштейна.
+
+\section{Разработка алгоритмов}
+
+На вход алгоритмов падаются строки s1 и s2, которые могут содержать как русские, так и английские буквы, на выходе получаем едиственное число -- искомое расстояние.
+
+На рис. \ref{fig:L_iter} --- \ref{fig:DL_iter} приведены схемы рекурсивных и итерационных алгоритмов Левенштейна и Дамерау--Левенштейна.
+
+\clearpage
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[scale=0.6]{img/iterative_lev.png}
+	\caption{Итеративный алгоритма нахождения расстояния Левенштейна}
+	\label{fig:L_iter}
+\end{figure}
+
+\clearpage
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[scale=0.6]{img/recursive_lev.png}
+	\caption{Рекурсивный алгоритм нахождения расстояния Левенштейна}
+	\label{fig:L_recur}
+\end{figure}
+
+\clearpage
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[scale=0.55]{img/recursive_cash_lev.png}
+	\caption{Рекурсивный алгоритм нахождения расстояния Левенштейна с кэшированием}
+	\label{fig:L_rec_cash}
+\end{figure}
+
+\clearpage
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[scale=0.48]{img/iterative_dam_lev.png}
+	\caption{Итеративный алгоритм нахождения расстояния Дамерау--Левенштейна}
+	\label{fig:DL_iter}
+\end{figure}
+
+\section*{Вывод}
+В данном разделе были разработаны алгоритмы для итерационного, рекурсивного, рекурсивного с мемоизацией алгоритмов поиска расстояния Левенштейна, а также итерационного алгоритма поиска расстояния Дамерау-Левенштейна.
+
+\clearpage
+
+\chapter{Технологическая часть}
+
+В данном разделе будут приведены данные о выбранном языке программирования, коды алгоритмов и тесты для каждого алгоритма.
+
+\section{Требования к ПО}
+Реализуемое ПО будет давать возможность выбрать алгоритм, ввести две сравниваемые строки и вывести результат вычислений, а также опционально вывести матрицу расстояний для итерационных алгоритмов. Должна быть реализована возможность сравнения эффективности алгоритмов по времени выполнения.
+
+\section{Язык программирования}
+В данной работе для реализации алгоритмов был выбран язык программирования $Python$ [2]. Язык предоставляет возможности для оценки затрат времени и памяти алгоритма. Время работы было замерено с помощью функции \textit{process\_time\_ns} из библиотеки $time$ [3].
+
+
+\section{Реализация алгоритмов}
+
+В листингах \ref{lst:lev_iterative} --- \ref{lst:dam_lev_iterative} представлены реализации алгоритмов нахождения расстояния Левенштейна и Дамерау–Левенштейна.
+
+\clearpage
+
+\begin{center}
+\captionsetup{justification=raggedright,singlelinecheck=off}
+\begin{lstlisting}[label=lst:lev_iterative,caption=Реализация итерационного нахождения расстояния Левенштейна]
+def levenstein_iterative(fir_word: str, sec_word: str) -> (int, list):
+    fir_len = len(fir_word)
+    sec_len = len(sec_word)
+
+    matrice = [[0] * (sec_len + 1) for _ in range(fir_len + 1)]
+
+    for i in range(fir_len + 1):
+        matrice[i][0] = i
+    for i in range(sec_len + 1):
+        matrice[0][i] = i
+
+    for i in range(1, fir_len + 1):
+        for j in range(1, sec_len + 1):
+            insert = matrice[i][j - 1] + insert_cost
+            delete = matrice[i - 1][j] + delete_cost
+            change = matrice[i - 1][j - 1]
+            if fir_word[i - 1] != sec_word[j - 1]:
+                change += change_cost
+
+            matrice[i][j] = min(insert, delete, change)
+
+    return matrice[fir_len][sec_len], matrice
+\end{lstlisting}
+\end{center}
+
+\clearpage
+
+\begin{center}
+\captionsetup{justification=raggedright,singlelinecheck=off}
+\begin{lstlisting}[label=lst:lev_recursive,caption=Реализация нахождения расстояния Левенштейна рекурсивно]
+def levenstein_recursive(fir_word: str, sec_word: str) -> int:
+    fir_len = len(fir_word)
+    sec_len = len(sec_word)
+
+    def recursion(fir_word: str, fir_len: int, sec_word: str, sec_len: int) -> int:
+        if fir_len == 0 or sec_len == 0:
+            return max(fir_len, sec_len)
+        change = recursion(fir_word, fir_len - 1, sec_word, sec_len - 1)
+        if fir_word[fir_len - 1] != sec_word[sec_len - 1]:
+            change += change_cost
+
+        return min(insert, delete, change)
+
+    return recursion(fir_word, fir_len, sec_word, sec_len)
+\end{lstlisting}
+\end{center}
+
+\clearpage
+
+\begin{center}
+\captionsetup{justification=raggedright,singlelinecheck=off}
+\begin{lstlisting}[label=lst:lev_recursive_hash,caption=Реализация нахождения расстояния Левенштейна рекурсивно с кэшированием]
+def levenstein_recursive_memoization(fir_word: str, sec_word: str) -> int:
+    fir_len = len(fir_word)
+    sec_len = len(sec_word)
+    answers = {}
+
+    def recursion_memoization(fir_word: str, fir_len: int, sec_word: str, sec_len: int) -> int:
+        if fir_len == 0 or sec_len == 0:
+            return max(fir_len, sec_len)
+
+        key = f"{fir_len} {sec_len}"
+        if key in answers:
+            return answers[key]
+        change = recursion_memoization(fir_word, fir_len - 1, sec_word, sec_len - 1)
+        if fir_word[fir_len - 1] != sec_word[sec_len - 1]:
+            change += change_cost
+
+        result = min(insert, delete, change)
+        answers[key] = result
+        return result
+
+    return recursion_memoization(fir_word, fir_len, sec_word, sec_len)
+\end{lstlisting}
+\end{center}
+
+\clearpage
+
+\begin{center}
+\captionsetup{justification=raggedright,singlelinecheck=off}
+\begin{lstlisting}[label=lst:dam_lev_iterative,caption=Реализация итерационного нахождения расстояния Дамерау–Левенштейна]
+def damerau_levenstein_iterative(fir_word: str, sec_word: str) -> (int, list):
+    fir_len = len(fir_word)
+    sec_len = len(sec_word)
+
+    matrice = [[0] * (sec_len + 1) for _ in range(fir_len + 1)]
+
+    for i in range(fir_len + 1):
+        matrice[i][0] = i
+    for i in range(sec_len + 1):
+        matrice[0][i] = i
+
+    for i in range(1, fir_len + 1):
+        for j in range(1, sec_len + 1):
+            change = matrice[i - 1][j - 1]
+            if fir_word[i - 1] != sec_word[j - 1]:
+                change += change_cost
+            swap = insert + delete + change
+            if i >= 2 and j >= 2:
+                if fir_word[i - 1] == sec_word[j - 2] and fir_word[i - 2] == sec_word[j - 1]:
+                    swap = matrice[i - 2][j - 2] + swap_cost
+
+            matrice[i][j] = min(insert, delete, change, swap)
+
+    return matrice[fir_len][sec_len], matrice
+\end{lstlisting}
+\end{center}
+
+\clearpage
+
+\section{Функциональные тесты}
+
+В таблице \ref{tbl:functional_test} приведены функциональные тесты для алгоритмов вычисления расстояния Левенштейна и Дамерау—Левенштейна. Числа в скобках i(j) обозначают несовпадение ожидаемых результатов вычисления расстояния Левенштейна и Дамерау--Левенштейна. Все тесты программа прошла успешно.
+
+
+\begin{table}[h]
+	\begin{center}
+	\begin{threeparttable}
+		\captionsetup{justification=raggedright,singlelinecheck=off}
+		\caption{\label{tbl:functional_test} Функциональные тесты}
+\begin{tabular}{|l|l|lllll|}
+
+
+\hline
+\multirow{2}{*}{1-я строка} & \multirow{2}{*}{2-я строка} & \multicolumn{5}{l|}{Результаты}                                                                                                       \\ \cline{3-7} 
+                            &                             & \multicolumn{1}{l|}{Эталон} & \multicolumn{1}{l|}{И. Лев.} & \multicolumn{1}{l|}{Р. Лев.} & \multicolumn{1}{l|}{Р. х. Лев.} & И. Д-Л \\ \hline
+{[}{]}                      & {[}{]}                      & \multicolumn{1}{l|}{0}      & \multicolumn{1}{l|}{0}       & \multicolumn{1}{l|}{0}       & \multicolumn{1}{l|}{0}            & 0     \\ \hline
+{[}{]}                      & Moscow                      & \multicolumn{1}{l|}{6}      & \multicolumn{1}{l|}{6}       & \multicolumn{1}{l|}{6}       & \multicolumn{1}{l|}{6}            & 6     \\ \hline
+Moscow                      & cow                         & \multicolumn{1}{l|}{3}      & \multicolumn{1}{l|}{3}       & \multicolumn{1}{l|}{3}       & \multicolumn{1}{l|}{3}            & 3     \\ \hline
+Moscow                      & Mocsow                      & \multicolumn{1}{l|}{2(1)}   & \multicolumn{1}{l|}{2}       & \multicolumn{1}{l|}{2}       & \multicolumn{1}{l|}{2}            & 1     \\ \hline
+Moscow                      & Mosco                       & \multicolumn{1}{l|}{1}      & \multicolumn{1}{l|}{1}       & \multicolumn{1}{l|}{1}       & \multicolumn{1}{l|}{1}            & 1     \\ \hline
+Moscow                      & Moscoe                      & \multicolumn{1}{l|}{1}      & \multicolumn{1}{l|}{1}       & \multicolumn{1}{l|}{1}       & \multicolumn{1}{l|}{1}            & 1     \\ \hline
+Moscow                      & wocsoM                      & \multicolumn{1}{l|}{4(3)}   & \multicolumn{1}{l|}{4}       & \multicolumn{1}{l|}{4}       & \multicolumn{1}{l|}{4}            & 3     \\ \hline
+Moscow                      & Russia                      & \multicolumn{1}{l|}{5}      & \multicolumn{1}{l|}{5}       & \multicolumn{1}{l|}{5}       & \multicolumn{1}{l|}{5}            & 5     \\ \hline
+\end{tabular}
+\end{threeparttable}
+\end{center}
+\end{table}
+
+\section*{Вывод}
+В данном разделе были приведены коды реализаций итерационных алгоритмов поиска расстояний Левенштейна и Дамерау-Левенштейна, рекурсивных алгоритмов поиска расстояния Левенштейна, а также функциональные тесты.
+
+
+
+\chapter{Исследовательская часть}
+В данном разделе будут представлены результаты исследования эффективности работы алгоритмов по времени работы.
+
+\section{Технические характеристики}
+
+В данном разделе представлены технические характеристики устройства, на котором проводилось исследование.
+
+\begin{itemize}
+    \item[---] Операционная система: Windows11 Домашняя, версия 23Н2, сборка ОС 22631.4037;
+    \item[---] Оперативная память: 16 ГБ;
+    \item[---] Процессор: 13th Gen Intel(R) Core(TM) i5-13500H   2.60 ГГц.
+\end{itemize}
+
+При тестировании ноутбук был включен в сеть электропитания и нагружен только встроенными приложениями окружения, а также системой тестирования.
+
+\section{Время выполнения алгоритмов}
+
+Результаты замеров времени работы алгоритмов нахождения расстояний Левенштейна и Дамерау–Левенштейна приведены в таблице \ref{tbl:time_measurements}. Замеры времени проводились на строках одинаковой длины, состоящих из строчных латинских символов, их результаты усреднялись для 1000 одинаковых измерений.
+
+\begin{table}[h]
+	\begin{center}
+		\begin{threeparttable}
+		\captionsetup{justification=raggedright,singlelinecheck=off}
+		\caption{Время работы алгоритмов (в микросекундах)}
+		\label{tbl:time_measurements}
+		\begin{tabular}{|c|c|c|c|c|}
+			\hline
+			Длина строк &  Лев итер.  & Лев рек. & Лев рек. кэш & Дам-Лев итер. \\
+                \hline
+			0    & 0.568 &   0.435 &    1.04 &   0.703 \\
+			\hline
+			1    & 0.952 &   0.837 &    1.55 &   0.954 \\ 
+			\hline
+			2    & 1.68 &     2.5 &    3.56 &    2.14 \\ 
+			\hline
+			3    & 2.81 &    11.7 &    7.42 &    3.82 \\ 
+			\hline
+			4    & 4.11 &    59.2 &    11.6 &    5.03 \\ 
+			\hline
+			5    & 5.74 & 2.97$\cdot 10^{2}$ &    18.4 &    7.35 \\ 
+			\hline
+			6    & 7.94 & 1.59$\cdot 10^{3}$ &    31.1 &    11.0 \\ 
+			\hline
+			7    & 11.7 & 8.64$\cdot 10^{3}$ &    39.8 &    13.1 \\ 
+			\hline
+			8    & 13.1 & 4.7$\cdot 10^{4}$ &    48.4 &    16.9 \\ 
+                \hline
+                9    & 15.9 & 2.64$\cdot 10^{5}$ &    61.2 &    21.1 \\
+                \hline
+                10    & 19.6 & 1.44$\cdot 10^{6}$ &    80.1 &    26.3 \\
+   
+			\hline
+		\end{tabular}
+		\end{threeparttable}
+    \end{center}
+\end{table}
+
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[scale=1]{img/Figure_1.png}
+	\caption{Сравнение итеративных алгоритмов вычисления расстояний Левенштейна и Дамерау--Левенштейна}
+	\label{fig:DL_table}
+\end{figure}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[scale=1]{img/Figure_2.png}
+	\caption{Сравнение рекурсивных алгоритмов вычисления расстояния Левенштейна}
+	\label{fig:DL_table}
+\end{figure}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[scale=1]{img/Figure_3.png}
+	\caption{Сравнение итеративного и рекурсивного(с кэшем) алгоритмов вычисления расстояния Левенштейна}
+	\label{fig:DL_table}
+\end{figure}
+
+\clearpage
+
+\section{Эффективность алгоритмов по памяти}
+
+Алгоритмы Левенштейна и Дамерау--Левенштейна не отличаются по использованию памяти, так как используют матрицы одинаковых размеров. Можно сравнить рекурсивную и итерационную реализацию алгоритмов для поиска расстояния Левенштейна.
+
+Пусть $S_{1}, S_{2}$ --- строки, size --- функция, возвращающая размер аргумента; len --- функция, возвращающая длину строки, char --- символьный тип, int --- целочисленный.
+
+Для итеративной реализации расход памяти рассчитывается следующим образом: память затрачивается на хранение матрицы из $(len(S_{1}) + 1) \cdot (len(S_{2}) + 1)$ чисел типа $int$ --- расстояний Левенштейна для всех возможных подстрок $S_{1}, S_{2}$, на хранение самих строк --- двух массивов типа $char$ с длинами\\ $len(S_{1}), len(S_{2})$ и на хранение длин строк и ответа --- еще три $int$-а.
+Итого:
+\begin{equation}
+	(len(S_{1}) + 1) \cdot (len(S_{2}) + 1) \cdot size(int)  + (len(S_{1}) + len(S_{2})) \cdot (size(char) + 3 \cdot size(int)
+\end{equation}
+
+При рекурсивной реализации память затрачивается на сами рекурсивные вызовы и на хранение двух входных строк.
+Максимальная глубина стека вызовов при рекурсивной реализации равна сумме длин входящих строк, а на каждый вызов функции требуется еще 3 дополнительных переменных типа $int$ (длины строк и ответ), соответственно, максимальный расход памяти
+
+\begin{equation}
+	(len(S_{1}) + len(S_{2})) \cdot ((len(S_{1}) + len(S_{2})) \cdot size(char) + 3 \cdot Size(\text{int}))
+\end{equation}
+
+\noindent
+
+По затратам памяти итеративные алгоритмы проигрывают рекурсивным, так как они хранят одновременно все расстояния Левенштейна для всех подстрок, максимальный размер используемой памяти в них растёт как произведение длин строк, в то время как у рекурсивного алгоритма — как сумма длин строк.
+
+\clearpage
+
+\section*{Вывод}
+
+Итеративные алгоритмы для поиска расстояний Левенштейна и Дамерау--Левенштейна не различаются по количеству используемой памяти, однако алгоритм для поиска расстояния Дамерау--Левенштейна работает немного дольше (см. рисунок 4.1), так как он является дополненной версией предыдущего алгоритма (на один if больше, а также проверки двух последних символов строк на возможность перестановки).
+Итеративные алгоритмы работают существенно быстрее чем рекурсивные (см. рисунок 4.3). При этом рекурсивный алгоритм с кэшированием работает гораздо быстрее простого рекурсивного алгоритма (см. рисунок 4.2), так как в алгоритме с кэшированием большое количество рекурсивных вызовов, вычисляющих одни и те же данные заменяются на обращение к кэшу с уже вывчисленными значениями. Уже на длине строк в 10 символов алгоритм с кэшированием оказывается быстрее простого рекурсивного алгоритма в 18406 раз. Однако алгоритм с кэшированием требует дополнительной памяти в виде словаря-кэша.
+
+
+\chapter*{Заключение}
+\addcontentsline{toc}{chapter}{Заключение}
+
+В ходе выполнения данной лабораторной работы были изучены итеративные и рекурсивные алгоритмы поиска расстояний Левенштейна и Дамерау--Левенштейна, а также решены следующие задачи:
+\begin{itemize}
+	\item[---] изучены итеративный и рекурсивный методы вычисления расстояния Левенштейна и Дамерау--Левенштейна;
+	\item[---] реализованы указанные алгоритмы поиска расстояния Левенштейна и Дамерау--Левенштейна;
+	\item[---] проведено сравнение эффективности указанных алгоритмов по затраченному процессорному времени и по затраченной памяти;
+	\item[---] описаны и обоснованы полученные результаты в отчете о выполненной лабораторной работе.
+\end{itemize}
+
+Итеративные алгоритмы для поиска расстояний Левенштейна и Дамерау--Левенштейна не различаются по количеству используемой памяти, однако алгоритм для поиска расстояния Дамерау--Левенштейна работает немного дольше (см. рисунок 4.1, график 1), так как он является дополненной версией предыдущего алгоритма (на один условный оператор больше, а также проверки двух последних символов строк на возможность перестановки).
+Итеративные алгоритмы работают существенно быстрее чем рекурсивные (см. рисунок 4.1, график 3). При этом рекурсивный алгоритм с кэшированием работает гораздо быстрее простого рекурсивного алгоритма (см. рисунок 4.1, график 2), так как в алгоритме с кэшированием большое количество рекурсивных вызовов, вычисляющих одни и те же данные заменяются на обращение к хэшу с уже вывчисленными значениями. Уже на длине строк в 10 символов алгоритм с кэшированием оказывается быстрее простого рекурсивного алгоритма в 18406 раз. Однако алгоритм с кэшированием требует дополнительной памяти в виде словаря-кэша.
+Поставленная цель достигнута, все задачи решены.
+
+\vspace{5mm}
+
+
+
+\renewcommand{\bibname}{Список использованных источников}
+\begin{thebibliography}{5}
+	\bibitem{bib1}
+	Левенштейн В. И. Двоичные коды с исправлением выпадений, вставок и замещений символов. –- М.: Доклады АН СССР, 1965. Т. 163. С. 845– 848.
+	\bibitem{bib2}
+	Документация языка Welcome to Python [Электронный ресурс]. Режим доступа: \url{https://www.python.org} (дата обращения: 12.09.2024).
+	\bibitem{bib3}
+	Документация модуля time —- Time access and conversions [Электронный ресурс]. Режим доступа: \url{https://docs.python.org/3/library/time.html#time.process_time_ns} (дата обращения: 12.09.2024).
+	\bibitem{bib5}
+	Кормановский, М.В. Граф на основе расстояния Левенштейна и его визуализация / М. В. Кормановский, Н. П. Артюхин, А. А. Косарев [и др.] // Проблемы лингвистики и лингводидактики в неязыковом вузе : 5-я Международная научно-практическая конференция: сборник материалов конференции. В 2-х томах, Москва, 15 декабря 2022 года. Том 1. – Москва: Московский государственный технический университет имени Н.Э. Баумана (национальный исследовательский университет), 2023. – С. 310-319.
+\end{thebibliography}
+
+\addcontentsline{toc}{chapter}{Список использованных источников}
+
+\end{document}

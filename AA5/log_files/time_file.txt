@@ -1,0 +1,10 @@
+Average existence time: 0.0286996 s.
+Average generation time: 2.1e-07 s.
+Average reading time: 0.00037968 s.
+Average data extraction time: 0.00012651 s.
+Average data base writing time: 4.4e-06 s.
+Average logging and destruction time: 0.00614001 s.
+Average waiting in after-generation queue time: 0.00183528 s.
+Average waiting in after-reading queue time: 1.07e-06 s.
+Average waiting in after-extraction queue time: 1e-06 s.
+Average waiting in after-writing queue time: 0.0263545 s.
